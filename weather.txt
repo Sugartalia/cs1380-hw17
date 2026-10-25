@@ -1,0 +1,25 @@
+Basic Questions, Part A
+
+1. A stack array like int log100 has a fixed size. It wastes space if I only have 8 readings and overflows if I have 800. malloc lets me choose the size while the program is running, so it fits how many readings I need.
+
+2. malloc returns NULL if it fails to allocate memory. I need to check it before using the pointer because writing through NULL causes undefined behavior and usually a segmentation fault.
+
+3. The caller owns the memory and has to free it when they're done using it. If I don't call free, the memory stays allocated while the program runs, causing a memory leak. The memory gets reclaimed when the program exits.
+
+Hand Trace
+
+After make_log, p holds the address of the allocated memory. The values are uninitialized, so they could be garbage.
+
+After filling the array, p still holds the address. The values are 68, 71, and 64. p means the first value, which is 68.
+
+After free_log, the memory is freed and `p` is set to NULL. Using *p after that causes undefined behavior because the pointer is NULL.
+
+Part B
+
+1. calloc sets all the allocated bytes to zero, but malloc doesn't initialize the memory. This means a new calloc log starts with zeros, while a new malloc log can contain garbage values.
+
+2. free_l uses an int because it needs to change the original pointer to NULL. C passes arguments by value, so using just an int * would only change a copy of the pointer.
+
+3. If I use malloc and lose the pointer without freeing the memory or giving the pointer back to the caller, it causes a memory leak. I can't free that memory anymore because I lost its address. The memory gets reclaimed when the program ends.
+
+
